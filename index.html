@@ -29,12 +29,24 @@ body{background:var(--bg);font-family:'Inter',sans-serif;color:var(--text);min-h
 .fade-l{left:0;background:linear-gradient(to right,#111,transparent);}
 .fade-r{right:0;background:linear-gradient(to left,#111,transparent);}
 .case-track{display:flex;width:max-content;padding:10px 0;will-change:transform;}
-.case-item{width:110px;height:120px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 3px;border-radius:10px;border:2px solid transparent;background:#1e1e1e;position:relative;overflow:hidden;transition:border-color .2s,box-shadow .2s;}
+.case-item{width:110px;height:120px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 3px;border-radius:10px;border:2px solid transparent;background:#1e1e1e;position:relative;overflow:hidden;}
 .case-item::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.04) 0%,transparent 60%);}
 .case-item .ci-emoji{font-size:38px;margin-bottom:5px;line-height:1;}
+.case-item .ci-svg{width:54px;height:54px;margin-bottom:5px;flex-shrink:0;}
 .case-item .ci-name{font-size:10px;font-weight:700;text-align:center;padding:0 5px;line-height:1.3;color:#ddd;}
 .case-item .ci-bar{position:absolute;bottom:0;left:0;right:0;height:3px;border-radius:0 0 8px 8px;}
 .case-item.ipad-glow{border-color:#FFD700 !important;box-shadow:0 0 18px rgba(255,215,0,.5) !important;}
+.case-item.win-glow{border-color:#fff !important;box-shadow:0 0 20px rgba(255,255,255,.4) !important;}
+.case-item.charger-glow{border-color:#60a5fa !important;animation:pulse-blue 2s ease-in-out infinite;}
+@keyframes pulse-blue{0%,100%{box-shadow:0 0 8px rgba(96,165,250,.4),0 0 20px rgba(96,165,250,.15)}50%{box-shadow:0 0 16px rgba(96,165,250,.8),0 0 32px rgba(96,165,250,.3)}}
+.pi.rarity-jackpot{border-color:rgba(255,215,0,.4)!important;background:rgba(255,215,0,.05)!important;}
+.pi.rarity-jackpot .pi-rare{color:#FFD700;}
+.pi.rarity-purple{border-color:rgba(167,139,250,.3);background:rgba(167,139,250,.04);}
+.pi.rarity-purple .pi-rare{color:#a78bfa;}
+.pi.rarity-blue{border-color:rgba(96,165,250,.35);background:rgba(96,165,250,.05);}
+.pi.rarity-blue .pi-rare{color:#60a5fa;}
+.pi.rarity-green{border-color:rgba(52,211,153,.3);background:rgba(52,211,153,.04);}
+.pi.rarity-green .pi-rare{color:#34d399;}
 .spin-btn{display:block;width:220px;margin:0 auto 20px;padding:15px;background:linear-gradient(135deg,#7c5cfc,#fc5c7d);border:none;border-radius:50px;color:#fff;font-family:'Unbounded',sans-serif;font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 4px 24px rgba(124,92,252,.5);-webkit-appearance:none;transition:transform .1s,opacity .15s;}
 .spin-btn:active{transform:scale(.95);}
 .spin-btn:disabled{opacity:.3;cursor:not-allowed;transform:none;}
@@ -51,6 +63,7 @@ body{background:var(--bg);font-family:'Inter',sans-serif;color:var(--text);min-h
 @keyframes pop{from{transform:scale(.5) translateY(40px);opacity:0;}to{transform:scale(1) translateY(0);opacity:1;}}
 .r-glow{position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:200px;height:200px;border-radius:50%;opacity:.15;filter:blur(40px);pointer-events:none;}
 .remoji{font-size:70px;display:block;margin-bottom:12px;position:relative;z-index:1;}
+.remoji svg{width:80px;height:80px;}
 .rtitle{font-family:'Unbounded',sans-serif;font-size:19px;font-weight:900;margin-bottom:6px;position:relative;z-index:1;}
 .rtitle.jackpot{color:var(--gold);}
 .rtitle.win{color:#a78bfa;}
@@ -104,12 +117,13 @@ body{background:var(--bg);font-family:'Inter',sans-serif;color:var(--text);min-h
 <div class="section">
   <div class="slabel">Призы</div>
   <div class="prizes-grid">
-    <div class="pi full"><span class="pi-emoji">📱</span><div><div class="pi-name">iPad 11</div><div class="pi-rare">Джекпот</div></div></div>
-    <div class="pi"><span class="pi-emoji">💳</span><div><div class="pi-name">Скидка 1 000 ₽</div><div class="pi-rare">Необычный</div></div></div>
+    <div class="pi full rarity-jackpot"><span class="pi-emoji" id="pi-ipad"></span><div><div class="pi-name">iPad 11</div><div class="pi-rare">🏆 Джекпот</div></div></div>
+    <div class="pi rarity-blue"><span class="pi-emoji" id="pi-charger"></span><div><div class="pi-name">Зарядный блок</div><div class="pi-rare">★ Редкий</div></div></div>
+    <div class="pi rarity-purple"><span class="pi-emoji">🎁</span><div><div class="pi-name">Скидка 2 000 ₽</div><div class="pi-rare">◆ Необычный</div></div></div>
+    <div class="pi rarity-green"><span class="pi-emoji">🛡️</span><div><div class="pi-name">Стекло</div><div class="pi-rare">◆ Необычный</div></div></div>
+    <div class="pi"><span class="pi-emoji">💳</span><div><div class="pi-name">Скидка 1 000 ₽</div><div class="pi-rare">Обычный</div></div></div>
     <div class="pi"><span class="pi-emoji">📦</span><div><div class="pi-name">Чехол</div><div class="pi-rare">Обычный</div></div></div>
     <div class="pi"><span class="pi-emoji">🔄</span><div><div class="pi-name">Ещё раз</div><div class="pi-rare">Обычный</div></div></div>
-    <div class="pi"><span class="pi-emoji">🛡️</span><div><div class="pi-name">Стекло</div><div class="pi-rare">Необычный</div></div></div>
-    <div class="pi"><span class="pi-emoji">🎁</span><div><div class="pi-name">Скидка 2 000 ₽</div><div class="pi-rare">Редкий</div></div></div>
   </div>
 </div>
 
@@ -130,60 +144,151 @@ body{background:var(--bg);font-family:'Inter',sans-serif;color:var(--text);min-h
 </div>
 
 <script>
+// SVG айпада — векторная иконка
+var IPAD_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 54 72" fill="none">'
+  + '<rect x="1" y="1" width="52" height="70" rx="7" ry="7" fill="#1a1a2e" stroke="#FFD700" stroke-width="1.5"/>'
+  + '<rect x="4" y="6" width="46" height="58" rx="3" ry="3" fill="#0a1628"/>'
+  // экран — цветные овалы как на реальном айпаде
+  + '<ellipse cx="24" cy="22" rx="13" ry="10" fill="#4AA8E8" opacity="0.9"/>'
+  + '<ellipse cx="27" cy="30" rx="13" ry="8" fill="#C04BC0" opacity="0.85"/>'
+  + '<ellipse cx="30" cy="37" rx="11" ry="7" fill="#E8384A" opacity="0.8"/>'
+  + '<ellipse cx="30" cy="44" rx="10" ry="6" fill="#F5C518" opacity="0.9"/>'
+  + '<ellipse cx="27" cy="50" rx="9" ry="4" fill="#e0e0e0" opacity="0.35"/>'
+  // рамка экрана поверх
+  + '<rect x="4" y="6" width="46" height="58" rx="3" ry="3" fill="none" stroke="#2a2a4a" stroke-width="0.5"/>'
+  // кнопка home / нижняя полоса
+  + '<rect x="21" y="67" width="12" height="2" rx="1" fill="#444"/>'
+  // боковые кнопки
+  + '<rect x="52" y="20" width="2" height="8" rx="1" fill="#333"/>'
+  + '<rect x="0" y="18" width="2" height="5" rx="1" fill="#333"/>'
+  + '<rect x="0" y="25" width="2" height="5" rx="1" fill="#333"/>'
+  // камера
+  + '<circle cx="6" cy="4" r="1.2" fill="#333"/>'
+  // логотип Apple на задней крышке (символично — на экране сверху)
+  + '<text x="27" y="12" text-anchor="middle" font-size="5" fill="rgba(255,255,255,0.15)" font-family="sans-serif"></text>'
+  + '</svg>';
+
+// SVG для попапа — крупнее
+var IPAD_SVG_LARGE = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 54 72" fill="none" width="80" height="107">'
+  + '<rect x="1" y="1" width="52" height="70" rx="7" ry="7" fill="#1a1a2e" stroke="#FFD700" stroke-width="2"/>'
+  + '<rect x="4" y="6" width="46" height="58" rx="3" ry="3" fill="#0a1628"/>'
+  + '<ellipse cx="24" cy="22" rx="13" ry="10" fill="#4AA8E8" opacity="0.9"/>'
+  + '<ellipse cx="27" cy="30" rx="13" ry="8" fill="#C04BC0" opacity="0.85"/>'
+  + '<ellipse cx="30" cy="37" rx="11" ry="7" fill="#E8384A" opacity="0.8"/>'
+  + '<ellipse cx="30" cy="44" rx="10" ry="6" fill="#F5C518" opacity="0.9"/>'
+  + '<ellipse cx="27" cy="50" rx="9" ry="4" fill="#e0e0e0" opacity="0.35"/>'
+  + '<rect x="4" y="6" width="46" height="58" rx="3" ry="3" fill="none" stroke="#2a2a4a" stroke-width="0.5"/>'
+  + '<rect x="21" y="67" width="12" height="2" rx="1" fill="#444"/>'
+  + '<rect x="52" y="20" width="2" height="8" rx="1" fill="#333"/>'
+  + '<rect x="0" y="18" width="2" height="5" rx="1" fill="#333"/>'
+  + '<rect x="0" y="25" width="2" height="5" rx="1" fill="#333"/>'
+  + '<circle cx="6" cy="4" r="1.2" fill="#333"/>'
+  + '</svg>';
+
+// SVG зарядного блока Apple (евровилка)
+var CHARGER_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 54 64" fill="none">'
+  // корпус — белый скруглённый прямоугольник
+  + '<rect x="7" y="22" width="40" height="40" rx="10" ry="10" fill="#e8e8e8" stroke="#c0c0c0" stroke-width="1"/>'
+  // верхняя часть вилки (переходник)
+  + '<rect x="15" y="14" width="24" height="12" rx="4" ry="4" fill="#f0f0f0" stroke="#c8c8c8" stroke-width="0.8"/>'
+  // левый штырёк
+  + '<rect x="18" y="2" width="6" height="14" rx="3" ry="3" fill="#d0d0d0" stroke="#aaa" stroke-width="0.8"/>'
+  + '<ellipse cx="21" cy="3" rx="2.5" ry="1.5" fill="#b0b0b0"/>'
+  + '<ellipse cx="21" cy="3" rx="1.2" ry="0.7" fill="#888"/>'
+  // правый штырёк
+  + '<rect x="30" y="2" width="6" height="14" rx="3" ry="3" fill="#d0d0d0" stroke="#aaa" stroke-width="0.8"/>'
+  + '<ellipse cx="33" cy="3" rx="2.5" ry="1.5" fill="#b0b0b0"/>'
+  + '<ellipse cx="33" cy="3" rx="1.2" ry="0.7" fill="#888"/>'
+  // USB-C порт снизу
+  + '<rect x="20" y="59" width="14" height="4" rx="2" fill="#c0c0c0"/>'
+  + '<rect x="22" y="60" width="10" height="2" rx="1" fill="#999"/>'
+  // лёгкая тень/объём на корпусе
+  + '<rect x="7" y="22" width="40" height="8" rx="10" ry="10" fill="rgba(255,255,255,0.3)"/>'
+  + '</svg>';
+
+var CHARGER_SVG_LARGE = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 54 64" fill="none" width="72" height="86">'
+  + '<rect x="7" y="22" width="40" height="40" rx="10" ry="10" fill="#e8e8e8" stroke="#c0c0c0" stroke-width="1"/>'
+  + '<rect x="15" y="14" width="24" height="12" rx="4" ry="4" fill="#f0f0f0" stroke="#c8c8c8" stroke-width="0.8"/>'
+  + '<rect x="18" y="2" width="6" height="14" rx="3" ry="3" fill="#d0d0d0" stroke="#aaa" stroke-width="0.8"/>'
+  + '<ellipse cx="21" cy="3" rx="2.5" ry="1.5" fill="#b0b0b0"/>'
+  + '<ellipse cx="21" cy="3" rx="1.2" ry="0.7" fill="#888"/>'
+  + '<rect x="30" y="2" width="6" height="14" rx="3" ry="3" fill="#d0d0d0" stroke="#aaa" stroke-width="0.8"/>'
+  + '<ellipse cx="33" cy="3" rx="2.5" ry="1.5" fill="#b0b0b0"/>'
+  + '<ellipse cx="33" cy="3" rx="1.2" ry="0.7" fill="#888"/>'
+  + '<rect x="20" y="59" width="14" height="4" rx="2" fill="#c0c0c0"/>'
+  + '<rect x="22" y="60" width="10" height="2" rx="1" fill="#999"/>'
+  + '<rect x="7" y="22" width="40" height="8" rx="10" ry="10" fill="rgba(255,255,255,0.3)"/>'
+  + '</svg>';
+
+// ─── ПРИЗЫ ───────────────────────────────────────────────────────────────────
 var PRIZES = [
-  {name:'iPad 11',      emoji:'📱', desc:'iPad 11 Wi-Fi 128GB!\nОформите выдачу у менеджера.',    type:'jackpot', color:'#FFD700', rare:'Джекпот',   w:1},
-  {name:'Скидка 2000₽', emoji:'🎁', desc:'Скидка 2 000 ₽ на след. покупку.\nДействует 30 дней.', type:'win',     color:'#a78bfa', rare:'Редкий',    w:28},
-  {name:'Стекло',       emoji:'🛡️', desc:'Защитное стекло в подарок!\nВыберите у менеджера.',     type:'prize',   color:'#52e5a0', rare:'Необычный', w:50},
-  {name:'Скидка 1000₽', emoji:'💳', desc:'Скидка 1 000 ₽ на след. покупку.\nДействует 30 дней.', type:'win',     color:'#5cf0fc', rare:'Необычный', w:180},
-  {name:'Чехол',        emoji:'📦', desc:'Чехол в подарок!\nВыберите у менеджера.',               type:'prize',   color:'#fc5c7d', rare:'Обычный',   w:175},
-  {name:'Ещё раз!',     emoji:'🔄', desc:'Попробуйте снова —\nудача совсем рядом!',               type:'retry',   color:'#ff9f43', rare:'Обычный',   w:65},
+  {name:'iPad 11',      emoji:'__IPAD__',    desc:'iPad 11 Wi-Fi 128GB!\nОформите выдачу у менеджера.',    type:'jackpot', color:'#FFD700', rarity:'jackpot',  w:1},
+  {name:'Скидка 2000₽', emoji:'🎁',          desc:'Скидка 2 000 ₽ на след. покупку.\nДействует 30 дней.', type:'win',     color:'#a78bfa', rarity:'purple',   w:112},
+  {name:'Стекло',       emoji:'🛡️',          desc:'Защитное стекло в подарок!\nВыберите у менеджера.',     type:'prize',   color:'#34d399', rarity:'green',    w:200},
+  {name:'Скидка 1000₽', emoji:'💳',          desc:'Скидка 1 000 ₽ на след. покупку.\nДействует 30 дней.', type:'win',     color:'#888',    rarity:'common',   w:720},
+  {name:'Чехол',        emoji:'📦',          desc:'Чехол в подарок!\nВыберите у менеджера.',               type:'prize',   color:'#888',    rarity:'common',   w:500},
+  {name:'Ещё раз!',     emoji:'🔄',          desc:'Попробуйте снова —\nудача совсем рядом!',               type:'retry',   color:'#888',    rarity:'common',   w:260},
+  {name:'Зарядный блок',emoji:'__CHARGER__', desc:'Зарядный блок в подарок!\nВыберите у менеджера.',       type:'prize',   color:'#60a5fa', rarity:'blue',     w:200},
 ];
-// Итого: 1+28+50+180+175+65 = 499 единиц
-// iPad: 1/499 ≈ 0.2% ✓
 
 var WA = [];
 for (var i = 0; i < PRIZES.length; i++)
   for (var w = 0; w < PRIZES[i].w; w++) WA.push(i);
 
-// Паттерн near-miss: раз в 3, потом в 5, потом в 2, потом в 4 — циклично
-var NEAR_MISS_PATTERN = [3, 5, 2, 4];
-var nearMissPatternIdx = 0;
-var nextNearMissAt = NEAR_MISS_PATTERN[0]; // первый near-miss на 3-й попытке
+var NM_PATTERN = [3, 5, 2, 4];
+var nmPatIdx = 0;
+var nextNM = NM_PATTERN[0];
 
 var IW = 116;
-var spinning = false, att = 0, spinCount = 0;
+var FINAL_POS = 60;
+var NM_FINAL = 58;
+var NM_IPAD  = 59;
+var STOPS = [-IW*0.4, -IW*0.2, 0, IW*0.2, IW*0.4];
+
+var spinning = false;
+var att = 0;
+var spinCount = 0;
 var track = document.getElementById('track');
 var trackOuter = document.getElementById('trackOuter');
 
-function makeItem(p, isIpad) {
-  var el = document.createElement('div');
-  el.className = 'case-item' + (isIpad ? ' ipad-glow' : '');
-  el.style.borderColor = p.color + (isIpad ? 'cc' : '44');
-  el.innerHTML =
-    '<div class="ci-emoji">' + p.emoji + '</div>' +
-    '<div class="ci-name">' + p.name + '</div>' +
-    '<div class="ci-bar" style="background:' + p.color + '"></div>';
-  return el;
+function makeItemInner(p, isIpad) {
+  if (isIpad) {
+    return '<div class="ci-svg">' + IPAD_SVG + '</div>'
+         + '<div class="ci-name">' + p.name + '</div>'
+         + '<div class="ci-bar" style="background:' + p.color + '"></div>';
+  }
+  if (p.emoji === '__CHARGER__') {
+    return '<div class="ci-svg">' + CHARGER_SVG + '</div>'
+         + '<div class="ci-name">' + p.name + '</div>'
+         + '<div class="ci-bar" style="background:' + p.color + '"></div>';
+  }
+  return '<div class="ci-emoji">' + p.emoji + '</div>'
+       + '<div class="ci-name">' + p.name + '</div>'
+       + '<div class="ci-bar" style="background:' + p.color + '"></div>';
 }
 
-// Строим ленту с частыми iPad
-function buildStrip(finalPos, nearMissPos) {
+function buildStrip(nearMiss) {
   track.innerHTML = '';
   var TOTAL = 80;
+  var finalPos = nearMiss ? NM_FINAL : FINAL_POS;
+  var iPadPos  = nearMiss ? NM_IPAD  : -1;
 
-  // Заполняем случайными призами, iPad встречается часто (~каждые 5-7 позиций)
   for (var i = 0; i < TOTAL; i++) {
-    // Каждые 5-7 позиций принудительно ставим iPad для визуала
-    var forceIpad = (i > 5 && i < finalPos - 3 && i !== nearMissPos && (i % 6 === 0 || i % 7 === 0));
+    var forceIpad = (i > 4 && i < finalPos - 2 && i !== iPadPos && i % 6 === 0);
     var ri = forceIpad ? 0 : WA[Math.floor(Math.random() * WA.length)];
     track.appendChild(makeItem(PRIZES[ri], ri === 0));
   }
 
-  // Near miss: iPad прямо перед финалом
-  if (nearMissPos !== null) {
-    setItem(nearMissPos, 0, true);
-  }
-  // Финальный приз устанавливается отдельно через setFinal()
+  if (nearMiss) setItem(NM_IPAD, 0, true);
+}
+
+function makeItem(p, isIpad) {
+  var el = document.createElement('div');
+  var isCharger = p.emoji === '__CHARGER__';
+  el.className = 'case-item' + (isIpad ? ' ipad-glow' : isCharger ? ' charger-glow' : '');
+  el.style.borderColor = isIpad ? '#FFD700cc' : p.color + '44';
+  el.innerHTML = makeItemInner(p, isIpad);
+  return el;
 }
 
 function setItem(pos, prizeIdx, isIpad) {
@@ -191,101 +296,69 @@ function setItem(pos, prizeIdx, isIpad) {
   var el = track.children[pos];
   if (!el) return;
   el.className = 'case-item' + (isIpad ? ' ipad-glow' : '');
-  el.style.borderColor = p.color + (isIpad ? 'cc' : '55');
-  el.innerHTML =
-    '<div class="ci-emoji">'+p.emoji+'</div>'+
-    '<div class="ci-name">'+p.name+'</div>'+
-    '<div class="ci-bar" style="background:'+p.color+'"></div>';
+  el.style.borderColor = isIpad ? '#FFD700cc' : p.color + '55';
+  el.innerHTML = makeItemInner(p, isIpad);
 }
 
-// Отдельная функция для установки финального приза по индексу
-function setFinal(pos, finalIdx) {
-  var p = PRIZES[finalIdx];
+function setFinal(pos, idx) {
+  var p = PRIZES[idx];
   var el = track.children[pos];
   if (!el) return;
-  el.className = 'case-item';
-  el.style.borderColor = p.color + '55';
-  el.innerHTML =
-    '<div class="ci-emoji">'+p.emoji+'</div>'+
-    '<div class="ci-name">'+p.name+'</div>'+
-    '<div class="ci-bar" style="background:'+p.color+'"></div>';
+  var isIpad = idx === 0;
+  el.className = 'case-item' + (isIpad ? ' ipad-glow' : '');
+  el.style.borderColor = isIpad ? '#FFD700cc' : p.color + '55';
+  el.innerHTML = makeItemInner(p, isIpad);
 }
-
-var FINAL_POS = 60;      // обычный финал
-var NEAR_MISS_FINAL = 58; // при near-miss финал здесь
-var NEAR_MISS_POS = 59;   // iPad прямо ПОСЛЕ финала при near-miss
 
 function doSpin() {
   if (spinning || att <= 0) return;
-  att--; upd(); spinning = true;
+  att--; upd();
+  spinning = true;
   document.getElementById('spinBtn').disabled = true;
   spinCount++;
 
-  var nearMiss = (spinCount === nextNearMissAt);
-  var finalIdx = WA[Math.floor(Math.random() * WA.length)];
+  var nearMiss = (spinCount === nextNM);
   if (nearMiss) {
-    if (finalIdx === 0) finalIdx = 4;
-    nearMissPatternIdx = (nearMissPatternIdx + 1) % NEAR_MISS_PATTERN.length;
-    nextNearMissAt = spinCount + NEAR_MISS_PATTERN[nearMissPatternIdx];
+    nmPatIdx = (nmPatIdx + 1) % NM_PATTERN.length;
+    nextNM = spinCount + NM_PATTERN[nmPatIdx];
   }
 
-  var usedFinalPos = nearMiss ? NEAR_MISS_FINAL : FINAL_POS;
+  var finalIdx = WA[Math.floor(Math.random() * WA.length)];
+  if (nearMiss && finalIdx === 0) finalIdx = 4;
 
-  buildStrip(usedFinalPos, nearMiss ? NEAR_MISS_POS : null);
-  setFinal(usedFinalPos, finalIdx);
+  buildStrip(nearMiss);
+  var finalPos = nearMiss ? NM_FINAL : FINAL_POS;
+  setFinal(finalPos, finalIdx);
 
   track.style.transition = 'none';
   track.style.transform = 'translateX(0px)';
   track.getBoundingClientRect();
 
-  var outerW = trackOuter.offsetWidth;
-  var center = outerW / 2;
+  var center = trackOuter.offsetWidth / 2;
+  var jitter = STOPS[Math.floor(Math.random() * STOPS.length)];
+  var target = -(finalPos * IW + IW / 2 - center + jitter);
 
-  if (nearMiss) {
-    animateNearMiss(usedFinalPos, finalIdx, center);
-  } else {
-    // 5 равных позиций внутри элемента: начало, чуть дальше, середина, дальше середины, почти конец
-    var stops = [-IW * 0.4, -IW * 0.2, 0, IW * 0.2, IW * 0.4];
-    var jitter = stops[Math.floor(Math.random() * stops.length)];
-    var targetOffset = -(FINAL_POS * IW + IW / 2 - center + jitter);
-    animateNormal(targetOffset, finalIdx);
-  }
+  if (nearMiss) animateNearMiss(target, finalPos, finalIdx);
+  else animateNormal(target, finalPos, finalIdx);
 }
 
-function animateNormal(target, finalIdx) {
-  // Останавливаемся чуть не по центру — как в CS:GO
-  // target уже содержит jitter из doSpin
+function animateNormal(target, finalPos, finalIdx) {
   var dur = 6200;
   var t0 = null;
-
   function ease(t) { return 1 - Math.pow(1 - t, 4); }
-
   (function frame(now) {
     if (!t0) t0 = now;
     var t = Math.min((now - t0) / dur, 1);
     track.style.transform = 'translateX(' + (target * ease(t)) + 'px)';
     if (t < 1) requestAnimationFrame(frame);
-    else onDone(FINAL_POS, finalIdx);
+    else onDone(finalPos, finalIdx);
   })(performance.now());
 }
 
-function animateNearMiss(finalPos, finalIdx, center) {
-  // Финал на позиции 58, iPad на 59.
-  // Лента останавливается так что финал под линией, iPad виден правее.
-  // Одна непрерывная кривая — никаких фаз, никакого рывка.
-  // Скорость в конце очень низкая — выглядит как обычное торможение.
-
-  // 5 равных позиций внутри финального элемента
-  var stops = [-IW * 0.4, -IW * 0.2, 0, IW * 0.2, IW * 0.4];
-  var jitter = stops[Math.floor(Math.random() * stops.length)];
-  var target = -(finalPos * IW + IW / 2 - center + jitter);
-
-  var dur = 6500;
+function animateNearMiss(target, finalPos, finalIdx) {
+  var dur = 6800;
   var t0 = null;
-
-  // Сильное ease-out — лента долго тормозит, iPad проплывает мимо медленно
   function ease(t) { return 1 - Math.pow(1 - t, 5); }
-
   (function frame(now) {
     if (!t0) t0 = now;
     var t = Math.min((now - t0) / dur, 1);
@@ -296,87 +369,106 @@ function animateNearMiss(finalPos, finalIdx, center) {
 }
 
 function onDone(finalPos, finalIdx) {
-  if (finalPos === undefined) { finalPos = FINAL_POS; }
   var el = track.children[finalPos];
-  if (el) {
-    el.style.borderColor = '#fff';
-    el.style.boxShadow = '0 0 20px rgba(255,255,255,.4)';
-  }
+  if (el) el.className = 'case-item win-glow';
   spinning = false;
   document.getElementById('spinBtn').disabled = false;
-  setTimeout(function(){ showResult(finalIdx); }, 500);
+  setTimeout(function() { showResult(finalIdx); }, 600);
 }
 
 function showResult(i) {
   var p = PRIZES[i];
   document.getElementById('rcard').style.setProperty('--rcolor', p.color);
   document.getElementById('rglow').style.background = p.color;
-  document.getElementById('remoji').textContent = p.emoji;
+
+  var emojiEl = document.getElementById('remoji');
+  if (i === 0) {
+    emojiEl.innerHTML = IPAD_SVG_LARGE;
+  } else if (p.emoji === '__CHARGER__') {
+    emojiEl.innerHTML = CHARGER_SVG_LARGE;
+  } else {
+    emojiEl.textContent = p.emoji;
+  }
+
   var tEl = document.getElementById('rtitle');
-  if (p.type==='jackpot'){tEl.textContent='🏆 ДЖЕКПОТ!';tEl.className='rtitle jackpot';}
-  else if (p.type==='win'){tEl.textContent='Вы выиграли!';tEl.className='rtitle win';}
-  else if (p.type==='retry'){tEl.textContent='Попробуйте ещё!';tEl.className='rtitle';}
-  else{tEl.textContent=p.name;tEl.className='rtitle';}
+  if (p.type === 'jackpot') { tEl.textContent = '🏆 ДЖЕКПОТ!'; tEl.className = 'rtitle jackpot'; }
+  else if (p.type === 'win') { tEl.textContent = 'Вы выиграли!'; tEl.className = 'rtitle win'; }
+  else if (p.type === 'retry') { tEl.textContent = 'Попробуйте ещё!'; tEl.className = 'rtitle'; }
+  else { tEl.textContent = p.name; tEl.className = 'rtitle'; }
+
   document.getElementById('rdesc').textContent = p.desc;
   document.getElementById('overlay').classList.add('show');
-  if (p.type==='jackpot'||p.type==='win') launchConfetti(p.type==='jackpot'?120:60);
-  if (p.type==='retry'){att++;upd();}else addHistory(p);
+  if (p.type === 'jackpot' || p.type === 'win') launchConfetti(p.type === 'jackpot' ? 120 : 60);
+  if (p.type === 'retry') { att++; upd(); } else addHistory(p);
 }
 
 function closeResult() {
   document.getElementById('overlay').classList.remove('show');
-  document.getElementById('cwrap').innerHTML='';
+  document.getElementById('cwrap').innerHTML = '';
 }
 
 function launchConfetti(n) {
   var wrap = document.getElementById('cwrap');
-  var colors=['#FFD700','#7c5cfc','#fc5c7d','#5cf0fc','#52e5a0','#fff'];
-  for (var i=0;i<n;i++){
-    var d=document.createElement('div');d.className='cp';
-    var sz=(6+Math.random()*10)+'px';
-    d.style.left=(Math.random()*100)+'vw';d.style.top='-10px';
-    d.style.width=sz;d.style.height=sz;
-    d.style.background=colors[Math.floor(Math.random()*colors.length)];
-    d.style.borderRadius=Math.random()>.5?'50%':'2px';
-    d.style.animationDuration=(1.5+Math.random()*2.5)+'s';
-    d.style.animationDelay=(Math.random()*.5)+'s';
+  var colors = ['#FFD700','#7c5cfc','#fc5c7d','#5cf0fc','#52e5a0','#fff'];
+  for (var i = 0; i < n; i++) {
+    var d = document.createElement('div'); d.className = 'cp';
+    var sz = (6 + Math.random() * 10) + 'px';
+    d.style.left = (Math.random() * 100) + 'vw'; d.style.top = '-10px';
+    d.style.width = sz; d.style.height = sz;
+    d.style.background = colors[Math.floor(Math.random() * colors.length)];
+    d.style.borderRadius = Math.random() > .5 ? '50%' : '2px';
+    d.style.animationDuration = (1.5 + Math.random() * 2.5) + 's';
+    d.style.animationDelay = (Math.random() * .5) + 's';
     wrap.appendChild(d);
   }
 }
 
 function add(n) {
-  att+=n;upd();
-  var el=document.getElementById('anum');
-  el.style.color='#52e5a0';el.style.transform='scale(1.3)';
-  setTimeout(function(){el.style.color='var(--accent)';el.style.transform='';},350);
+  att += n; upd();
+  var el = document.getElementById('anum');
+  el.style.color = '#52e5a0'; el.style.transform = 'scale(1.3)';
+  setTimeout(function() { el.style.color = 'var(--accent)'; el.style.transform = ''; }, 350);
 }
 
 function upd() {
-  document.getElementById('anum').textContent=att;
-  document.getElementById('spinBtn').disabled=(att<=0||spinning);
+  document.getElementById('anum').textContent = att;
+  document.getElementById('spinBtn').disabled = (att <= 0 || spinning);
 }
 
 function addHistory(p) {
-  var list=document.getElementById('hlist');
-  var empty=list.querySelector('.empty');if(empty)empty.remove();
-  var now=new Date();
-  var t=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
-  var item=document.createElement('div');item.className='hitem';
-  item.innerHTML='<span class="hemoji">'+p.emoji+'</span><div><div class="hname">'+p.name+'</div><div class="htime">'+t+'</div></div>';
-  list.insertBefore(item,list.firstChild);
+  var list = document.getElementById('hlist');
+  var empty = list.querySelector('.empty'); if (empty) empty.remove();
+  var now = new Date();
+  var t = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+  var item = document.createElement('div'); item.className = 'hitem';
+  var iconHtml = (p.emoji === '__IPAD__')
+    ? '<span class="hemoji" style="width:22px;height:22px;display:inline-flex">' + IPAD_SVG + '</span>'
+    : (p.emoji === '__CHARGER__')
+    ? '<span class="hemoji" style="width:22px;height:22px;display:inline-flex">' + CHARGER_SVG + '</span>'
+    : '<span class="hemoji">' + p.emoji + '</span>';
+  item.innerHTML = iconHtml + '<div><div class="hname">'+p.name+'</div><div class="htime">'+t+'</div></div>';
+  list.insertBefore(item, list.firstChild);
 }
 
-buildStrip(FINAL_POS, null);
+buildStrip(false);
 setFinal(FINAL_POS, 4);
-track.style.transform='translateX(0px)';
+track.style.transform = 'translateX(0px)';
 
-document.getElementById('spinBtn').addEventListener('touchstart',function(e){e.preventDefault();doSpin();},{passive:false});
-document.getElementById('spinBtn').addEventListener('click',function(){doSpin();});
-document.getElementById('closeBtn').addEventListener('touchstart',function(e){e.preventDefault();closeResult();},{passive:false});
-document.getElementById('closeBtn').addEventListener('click',function(){closeResult();});
-document.querySelectorAll('.abtn').forEach(function(btn){
-  btn.addEventListener('touchstart',function(e){e.preventDefault();add(parseInt(this.getAttribute('data-add')));},{passive:false});
-  btn.addEventListener('click',function(){add(parseInt(this.getAttribute('data-add')));});
+// Вставить SVG айпада в блок призов
+(function() {
+  var el = document.getElementById('pi-ipad');
+  if (el) { el.style.cssText = 'width:28px;height:28px;display:inline-flex;flex-shrink:0'; el.innerHTML = IPAD_SVG; }
+  var el2 = document.getElementById('pi-charger');
+  if (el2) { el2.style.cssText = 'width:28px;height:28px;display:inline-flex;flex-shrink:0'; el2.innerHTML = CHARGER_SVG; }
+})();
+
+document.getElementById('spinBtn').addEventListener('touchstart', function(e) { e.preventDefault(); doSpin(); }, {passive:false});
+document.getElementById('spinBtn').addEventListener('click', function() { doSpin(); });
+document.getElementById('closeBtn').addEventListener('touchstart', function(e) { e.preventDefault(); closeResult(); }, {passive:false});
+document.getElementById('closeBtn').addEventListener('click', function() { closeResult(); });
+document.querySelectorAll('.abtn').forEach(function(btn) {
+  btn.addEventListener('touchstart', function(e) { e.preventDefault(); add(parseInt(this.getAttribute('data-add'))); }, {passive:false});
+  btn.addEventListener('click', function() { add(parseInt(this.getAttribute('data-add'))); });
 });
 </script>
 </body>
