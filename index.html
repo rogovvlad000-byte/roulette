@@ -301,10 +301,12 @@ var PRIZES=[
 ];
 
 var WA=[];for(var i=0;i<PRIZES.length;i++)for(var w=0;w<PRIZES[i].w;w++)WA.push(i);
-var NM_PATTERN=[3,5,2,4],nmPatIdx=0,nextNM=NM_PATTERN[0];
+// Near-miss паттерн: раз в 2, раз в 5, раз в 7 — циклично
+var NM_PATTERN=[2,5,7],nmPatIdx=0,nextNM=NM_PATTERN[0];
 var IW=118;
 var STOPS=[-IW*.4,-IW*.2,0,IW*.2,IW*.4];
 var spinning=false,stopping=false,att=0,spinCount=0;
+var currentNearMiss=false;
 var track=document.getElementById('track');
 var trackOuter=document.getElementById('trackOuter');
 var speedBar=document.getElementById('speedBar');
@@ -312,8 +314,12 @@ var speedLabel=document.getElementById('speedLabel');
 var spinBtn=document.getElementById('spinBtn');
 var stopBtn=document.getElementById('stopBtn');
 var currentOffset=0,currentSpeed=0,maxSpeed=3.0,accelDuration=2200;
-var finalIdx=0,finalPos=160,rafId=null,accelStart=null,lastTime=null;
-var TOTAL=200;
+var finalIdx=0,finalPos=0,rafId=null,accelStart=null,lastTime=null;
+
+// Видимое окно — только столько элементов сколько помещается + запас
+var VISIBLE=20; // элементов в DOM
+var virtualItems=[]; // массив индексов призов для виртуальной ленты
+var virtualStart=0; // с какого виртуального индекса начинается DOM
 
 function makeItemInner(p,isIpad){
   if(isIpad)return'<div class="ci-svg">'+IPAD_SVG+'</div><div class="ci-name">'+p.name+'</div><div class="ci-bar" style="background:'+p.color+'"></div>';
@@ -327,41 +333,103 @@ function makeItem(p,isIpad){
   el.innerHTML=makeItemInner(p,isIpad);
   return el;
 }
-function setItemAt(pos,idx,isIpad){
-  var p=PRIZES[idx],el=track.children[pos];if(!el)return;
-  el.className='case-item'+(isIpad?' ipad-glow':'');
-  el.style.borderColor=isIpad?'rgba(251,191,36,.5)':p.color+'44';
-  el.innerHTML=makeItemInner(p,isIpad);
+
+// Генерируем случайный приз (без принудительного iPad рядом с финалом)
+function randomPrizeIdx(){
+  return WA[Math.floor(Math.random()*WA.length)];
 }
-function buildLongStrip(){
+
+// Строим начальную ленту — 60 элементов
+var STRIP_SIZE=60;
+function buildStrip(){
   track.innerHTML='';
-  for(var i=0;i<TOTAL;i++){
-    var forceIpad=(i>10&&i<TOTAL-20&&i%7===0);
-    var ri=forceIpad?0:WA[Math.floor(Math.random()*WA.length)];
+  virtualItems=[];
+  for(var i=0;i<STRIP_SIZE;i++){
+    // iPad каждые 7 позиций для визуала, но НЕ рядом с финалом
+    var forceIpad=(i>5 && i%7===0);
+    var ri=forceIpad?0:randomPrizeIdx();
+    virtualItems.push(ri);
     track.appendChild(makeItem(PRIZES[ri],ri===0));
   }
-  setItemAt(finalPos,finalIdx,finalIdx===0);
   currentOffset=0;
   track.style.transform='translateX(0px)';
 }
-function getFinalOffset(){
+
+// Добавляем элементы в конец ленты по мере прокрутки
+function extendStripIfNeeded(){
+  var outerW=trackOuter.offsetWidth;
+  // Сколько пикселей уже прокручено
+  var scrolled=Math.abs(currentOffset);
+  // Сколько элементов прокручено
+  var itemsScrolled=Math.floor(scrolled/IW);
+  // Сколько элементов в DOM
+  var domCount=track.children.length;
+  // Если до конца ленты осталось меньше 20 элементов — добавляем ещё 20
+  if(domCount-itemsScrolled<20){
+    for(var j=0;j<20;j++){
+      var ri=randomPrizeIdx();
+      virtualItems.push(ri);
+      track.appendChild(makeItem(PRIZES[ri],ri===0));
+    }
+  }
+}
+
+// Вычисляем финальную позицию — берём текущую прокрученную позицию + запас
+function computeFinalPos(nearMiss){
+  var scrolled=Math.abs(currentOffset);
+  var itemsScrolled=Math.floor(scrolled/IW);
+  // Финал на 15-25 элементов вперёд от текущей позиции
+  var ahead=15+Math.floor(Math.random()*10);
+  var fp=itemsScrolled+ahead;
+  // Убедимся что в DOM достаточно элементов
+  while(track.children.length<=fp+5){
+    var ri=randomPrizeIdx();
+    virtualItems.push(ri);
+    track.appendChild(makeItem(PRIZES[ri],ri===0));
+  }
+
+  // Near-miss: ставим iPad на 1-2 позиции ДО финала
+  if(nearMiss){
+    var nmOffset=1+Math.floor(Math.random()*2); // 1 или 2 позиции раньше
+    var nmPos=fp-nmOffset;
+    if(nmPos>=0 && track.children[nmPos]){
+      var iPadEl=track.children[nmPos];
+      iPadEl.className='case-item ipad-glow';
+      iPadEl.style.borderColor='rgba(251,191,36,.5)';
+      iPadEl.innerHTML=makeItemInner(PRIZES[0],true);
+    }
+  }
+
+  // Ставим финальный приз
+  var el=track.children[fp];
+  var p=PRIZES[finalIdx];
+  var isIpad=finalIdx===0;
+  el.className='case-item'+(isIpad?' ipad-glow':'');
+  el.style.borderColor=isIpad?'rgba(251,191,36,.5)':p.color+'44';
+  el.innerHTML=makeItemInner(p,isIpad);
+  return fp;
+}
+
+function getFinalOffset(fp){
   var center=trackOuter.offsetWidth/2;
   var jitter=STOPS[Math.floor(Math.random()*STOPS.length)];
-  return -(finalPos*IW+IW/2-center+jitter);
+  return -(fp*IW+IW/2-center+jitter);
 }
+
 function doSpin(){
   if(spinning||att<=0)return;
   att--;upd();spinning=true;stopping=false;spinCount++;
-  var nearMiss=(spinCount===nextNM);
-  if(nearMiss){nmPatIdx=(nmPatIdx+1)%NM_PATTERN.length;nextNM=spinCount+NM_PATTERN[nmPatIdx];}
+  currentNearMiss=(spinCount===nextNM);
+  if(currentNearMiss){nmPatIdx=(nmPatIdx+1)%NM_PATTERN.length;nextNM=spinCount+NM_PATTERN[nmPatIdx];}
   finalIdx=WA[Math.floor(Math.random()*WA.length)];
-  if(nearMiss&&finalIdx===0)finalIdx=4;
-  buildLongStrip();
+  if(currentNearMiss&&finalIdx===0)finalIdx=4;
+  buildStrip();
   spinBtn.disabled=true;spinBtn.style.display='none';
   stopBtn.classList.add('visible');stopBtn.disabled=false;
   accelStart=null;currentSpeed=0;lastTime=null;
   rafId=requestAnimationFrame(accelerate);
 }
+
 var SPEED_LABELS=['Медленно','Разгон...','Быстро','Очень быстро','МАКСИМУМ ⚡'];
 function accelerate(now){
   if(!accelStart)accelStart=now;
@@ -375,13 +443,18 @@ function accelerate(now){
   speedLabel.textContent=SPEED_LABELS[Math.min(Math.floor(pct*5),4)];
   currentOffset-=currentSpeed*dt;
   track.style.transform='translateX('+currentOffset+'px)';
+  // Динамически добавляем элементы
+  extendStripIfNeeded();
   if(!stopping)rafId=requestAnimationFrame(accelerate);
 }
+
 function doStop(){
   if(!spinning||stopping)return;
   stopping=true;stopBtn.disabled=true;
   cancelAnimationFrame(rafId);
-  var target=getFinalOffset();
+  // Вычисляем финальную позицию прямо сейчас
+  finalPos=computeFinalPos(currentNearMiss);
+  var target=getFinalOffset(finalPos);
   var startOffset=currentOffset;
   var dist=target-startOffset;
   var brakeDur=Math.max(2800,currentSpeed*1400);
@@ -399,6 +472,7 @@ function doStop(){
   }
   requestAnimationFrame(brake);
 }
+
 function onDone(){
   var el=track.children[finalPos];
   if(el)el.className='case-item win-glow';
@@ -455,7 +529,7 @@ function addHistory(p){
   item.innerHTML=icon+'<div><div class="hname">'+p.name+'</div><div class="htime">'+t+'</div></div>';
   list.insertBefore(item,list.firstChild);
 }
-finalIdx=4;buildLongStrip();
+finalIdx=4;buildStrip();
 (function(){
   var e=document.getElementById('pi-ipad');
   if(e){e.style.cssText='width:28px;height:28px;display:inline-flex;flex-shrink:0';e.innerHTML=IPAD_SVG;}
