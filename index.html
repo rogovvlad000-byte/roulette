@@ -16,6 +16,8 @@
   --accent2:#c084fc;
   --gold:#fbbf24;
   --gold2:#fde68a;
+  --mega:#ff3b8d;
+  --mega2:#ff85b8;
   --text:#f5f3ff;
   --dim:#6d6a8a;
   --red:#f43f5e;
@@ -29,7 +31,6 @@ body{
   display:flex;flex-direction:column;align-items:center;overflow-x:hidden;padding-bottom:40px;
 }
 
-/* Header */
 .header{width:100%;padding:24px 20px 16px;text-align:center;position:relative;}
 .header::after{content:'';position:absolute;bottom:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);}
 .logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:4px;}
@@ -37,7 +38,14 @@ body{
 .logo-text{font-family:'Unbounded',sans-serif;font-size:20px;font-weight:900;background:linear-gradient(135deg,#fff,var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .sub{font-size:12px;color:var(--dim);letter-spacing:.5px;}
 
-/* Attempts */
+.sound-row{display:flex;justify-content:center;margin:12px 0 4px;}
+.sound-toggle{
+  display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:20px;
+  border:1px solid var(--border);background:var(--card);color:var(--text);
+  font-size:12px;cursor:pointer;-webkit-appearance:none;font-family:'Inter',sans-serif;
+}
+.sound-toggle svg{width:16px;height:16px;flex-shrink:0;}
+
 .section{width:100%;max-width:420px;padding:0 16px;margin-bottom:14px;}
 .slabel{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;text-align:center;}
 .abox{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:14px;display:flex;gap:12px;align-items:center;box-shadow:0 4px 24px rgba(0,0,0,.4);}
@@ -54,7 +62,6 @@ body{
 .abtn:active{background:rgba(139,92,246,.2);border-color:rgba(139,92,246,.5);}
 .badge{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;flex-shrink:0;}
 
-/* Track */
 .case-wrapper{width:100%;max-width:420px;padding:0 16px;margin-bottom:12px;}
 .track-label{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;text-align:center;}
 .case-track-outer{
@@ -63,7 +70,6 @@ body{
   border:1px solid var(--border);
   box-shadow:0 0 40px rgba(139,92,246,.15),inset 0 0 30px rgba(0,0,0,.5);
 }
-/* Gold line */
 .case-track-outer::before{
   content:'';position:absolute;left:50%;top:0;bottom:0;width:2px;
   background:linear-gradient(180deg,var(--gold2),var(--gold),var(--gold2));
@@ -81,7 +87,6 @@ body{
 
 .case-track{display:flex;width:max-content;padding:12px 0;will-change:transform;}
 
-/* Items */
 .case-item{
   width:112px;height:124px;flex-shrink:0;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -102,7 +107,11 @@ body{
 .case-item .ci-name{font-size:9px;font-weight:700;text-align:center;padding:0 6px;line-height:1.3;color:#c4b5fd;position:relative;z-index:1;letter-spacing:.3px;}
 .case-item .ci-bar{position:absolute;bottom:0;left:0;right:0;height:2px;}
 
-/* Rarity glow classes */
+.case-item.mega-glow{
+  border-color:rgba(255,59,141,.7) !important;
+  box-shadow:0 0 28px rgba(255,59,141,.55),inset 0 0 22px rgba(255,59,141,.08) !important;
+  background:linear-gradient(160deg,rgba(40,8,25,.95),rgba(20,4,12,.98)) !important;
+}
 .case-item.ipad-glow{
   border-color:rgba(251,191,36,.6) !important;
   box-shadow:0 0 24px rgba(251,191,36,.4),inset 0 0 20px rgba(251,191,36,.05) !important;
@@ -113,7 +122,6 @@ body{
   box-shadow:0 0 28px rgba(139,92,246,.5),inset 0 0 20px rgba(139,92,246,.08) !important;
 }
 
-/* Speed bar */
 .speed-bar-wrap{width:100%;max-width:420px;padding:0 16px;margin-bottom:12px;}
 .speed-label{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;display:flex;justify-content:space-between;}
 .speed-bar-bg{height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;}
@@ -124,7 +132,6 @@ body{
   box-shadow:0 0 8px rgba(139,92,246,.6);
 }
 
-/* Buttons */
 .btns-row{display:flex;gap:10px;justify-content:center;margin-bottom:20px;width:100%;max-width:420px;padding:0 16px;}
 .spin-btn{
   flex:1;padding:16px;
@@ -150,7 +157,6 @@ body{
 .stop-btn.visible{display:block;}
 .stop-btn:disabled{opacity:.3;cursor:not-allowed;}
 
-/* Prizes */
 .prizes-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
 .pi{
   background:var(--card);border:1px solid var(--border);
@@ -161,13 +167,14 @@ body{
 .pi-emoji{font-size:22px;flex-shrink:0;}
 .pi-name{font-size:11px;font-weight:700;color:var(--text);}
 .pi-rare{font-size:9px;color:var(--dim);margin-top:1px;letter-spacing:.3px;}
+.pi.rarity-mega{border-color:rgba(255,59,141,.4);background:linear-gradient(135deg,rgba(40,8,25,.8),rgba(20,4,12,.9));}
+.pi.rarity-mega .pi-rare{color:var(--mega);}
 .pi.rarity-jackpot{border-color:rgba(251,191,36,.35);background:linear-gradient(135deg,rgba(40,30,5,.8),rgba(20,15,3,.9));}
 .pi.rarity-jackpot .pi-rare{color:var(--gold);}
 .pi.rarity-blue .pi-rare{color:#60a5fa;}
 .pi.rarity-purple .pi-rare{color:var(--accent2);}
 .pi.rarity-green .pi-rare{color:#34d399;}
 
-/* Overlay */
 .overlay{display:none;position:fixed;inset:0;background:rgba(8,6,15,.95);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(12px);}
 .overlay.show{display:flex;}
 .rcard{
@@ -184,6 +191,7 @@ body{
 .remoji{font-size:72px;display:block;margin-bottom:14px;position:relative;z-index:1;}
 .remoji svg{width:84px;height:84px;}
 .rtitle{font-family:'Unbounded',sans-serif;font-size:18px;font-weight:900;margin-bottom:8px;position:relative;z-index:1;line-height:1.2;}
+.rtitle.mega{background:linear-gradient(135deg,var(--mega),var(--mega2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .rtitle.jackpot{background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .rtitle.win{color:var(--accent2);}
 .rdesc{font-size:13px;color:var(--dim);margin-bottom:26px;line-height:1.7;position:relative;z-index:1;white-space:pre-line;}
@@ -197,12 +205,10 @@ body{
 }
 .rbtn:active{opacity:.85;}
 
-/* Confetti */
 .cwrap{position:fixed;inset:0;pointer-events:none;z-index:199;overflow:hidden;}
 .cp{position:absolute;animation:fall linear forwards;}
 @keyframes fall{0%{transform:translateY(-10px) rotate(0deg);opacity:1;}100%{transform:translateY(105vh) rotate(720deg);opacity:0;}}
 
-/* History */
 .hlist{display:flex;flex-direction:column;gap:8px;}
 .hitem{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;}
 .hemoji{font-size:22px;}
@@ -221,7 +227,15 @@ body{
   <div class="sub">Останови ленту — получи подарок</div>
 </div>
 
-<div class="section" style="margin-top:16px;">
+<div class="sound-row">
+  <button class="sound-toggle" id="soundToggle">
+    <svg id="volIconOn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"/></svg>
+    <svg id="volIconOff" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+    <span id="volLabel">Звук включён</span>
+  </button>
+</div>
+
+<div class="section" style="margin-top:6px;">
   <div class="slabel">Попытки клиента</div>
   <div class="abox">
     <div class="anum" id="anum">0</div>
@@ -258,6 +272,7 @@ body{
 <div class="section">
   <div class="slabel">Призы</div>
   <div class="prizes-grid">
+    <div class="pi full rarity-mega"><span class="pi-emoji" id="pi-iphone"></span><div><div class="pi-name">iPhone 17</div><div class="pi-rare">⬥ МЕГА-ДЖЕКПОТ</div></div></div>
     <div class="pi full rarity-jackpot"><span class="pi-emoji" id="pi-ipad"></span><div><div class="pi-name">iPad 11</div><div class="pi-rare">✦ ДЖЕКПОТ</div></div></div>
     <div class="pi rarity-blue"><span class="pi-emoji" id="pi-charger"></span><div><div class="pi-name">Зарядный блок</div><div class="pi-rare">★ Редкий</div></div></div>
     <div class="pi rarity-purple"><span class="pi-emoji">🎁</span><div><div class="pi-name">Скидка 2 000 ₽</div><div class="pi-rare">◆ Необычный</div></div></div>
@@ -285,6 +300,8 @@ body{
 </div>
 
 <script>
+var IPHONE_SVG='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 72" fill="none"><rect x="1" y="1" width="36" height="70" rx="9" fill="#1a1a2e" stroke="#ff3b8d" stroke-width="1.5"/><rect x="4" y="6" width="30" height="58" rx="4" fill="#0a1628"/><rect x="13" y="3" width="12" height="3.5" rx="1.75" fill="#000"/><ellipse cx="14" cy="22" rx="9" ry="9" fill="#4AA8E8" opacity="0.9"/><ellipse cx="19" cy="30" rx="9" ry="7" fill="#C04BC0" opacity="0.85"/><ellipse cx="22" cy="38" rx="8" ry="6" fill="#E8384A" opacity="0.8"/><ellipse cx="22" cy="45" rx="7" ry="5" fill="#F5C518" opacity="0.9"/><ellipse cx="19" cy="51" rx="7" ry="3.5" fill="#e0e0e0" opacity="0.35"/><rect x="35" y="20" width="2" height="6" rx="1" fill="#333"/><rect x="0" y="18" width="2" height="4" rx="1" fill="#333"/><rect x="0" y="24" width="2" height="4" rx="1" fill="#333"/></svg>';
+var IPHONE_SVG_LARGE='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 72" fill="none" width="60" height="114"><rect x="1" y="1" width="36" height="70" rx="9" fill="#1a1a2e" stroke="#ff3b8d" stroke-width="2"/><rect x="4" y="6" width="30" height="58" rx="4" fill="#0a1628"/><rect x="13" y="3" width="12" height="3.5" rx="1.75" fill="#000"/><ellipse cx="14" cy="22" rx="9" ry="9" fill="#4AA8E8" opacity="0.9"/><ellipse cx="19" cy="30" rx="9" ry="7" fill="#C04BC0" opacity="0.85"/><ellipse cx="22" cy="38" rx="8" ry="6" fill="#E8384A" opacity="0.8"/><ellipse cx="22" cy="45" rx="7" ry="5" fill="#F5C518" opacity="0.9"/><ellipse cx="19" cy="51" rx="7" ry="3.5" fill="#e0e0e0" opacity="0.35"/></svg>';
 var IPAD_SVG='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 54 72" fill="none"><rect x="1" y="1" width="52" height="70" rx="7" fill="#1a1a2e" stroke="#fbbf24" stroke-width="1.5"/><rect x="4" y="6" width="46" height="58" rx="3" fill="#0a1628"/><ellipse cx="24" cy="22" rx="13" ry="10" fill="#4AA8E8" opacity="0.9"/><ellipse cx="27" cy="30" rx="13" ry="8" fill="#C04BC0" opacity="0.85"/><ellipse cx="30" cy="37" rx="11" ry="7" fill="#E8384A" opacity="0.8"/><ellipse cx="30" cy="44" rx="10" ry="6" fill="#F5C518" opacity="0.9"/><ellipse cx="27" cy="50" rx="9" ry="4" fill="#e0e0e0" opacity="0.35"/><rect x="21" y="67" width="12" height="2" rx="1" fill="#444"/><rect x="52" y="20" width="2" height="8" rx="1" fill="#333"/><rect x="0" y="18" width="2" height="5" rx="1" fill="#333"/><rect x="0" y="25" width="2" height="5" rx="1" fill="#333"/><circle cx="6" cy="4" r="1.2" fill="#333"/></svg>';
 var IPAD_SVG_LARGE='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 54 72" fill="none" width="84" height="112"><rect x="1" y="1" width="52" height="70" rx="7" fill="#1a1a2e" stroke="#fbbf24" stroke-width="2"/><rect x="4" y="6" width="46" height="58" rx="3" fill="#0a1628"/><ellipse cx="24" cy="22" rx="13" ry="10" fill="#4AA8E8" opacity="0.9"/><ellipse cx="27" cy="30" rx="13" ry="8" fill="#C04BC0" opacity="0.85"/><ellipse cx="30" cy="37" rx="11" ry="7" fill="#E8384A" opacity="0.8"/><ellipse cx="30" cy="44" rx="10" ry="6" fill="#F5C518" opacity="0.9"/><ellipse cx="27" cy="50" rx="9" ry="4" fill="#e0e0e0" opacity="0.35"/><rect x="21" y="67" width="12" height="2" rx="1" fill="#555"/></svg>';
 var CHARGER_SVG='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 54 64" fill="none"><rect x="7" y="22" width="40" height="40" rx="10" fill="#e8e8e8" stroke="#c0c0c0" stroke-width="1"/><rect x="15" y="14" width="24" height="12" rx="4" fill="#f0f0f0" stroke="#c8c8c8" stroke-width="0.8"/><rect x="18" y="2" width="6" height="14" rx="3" fill="#d0d0d0" stroke="#aaa" stroke-width="0.8"/><ellipse cx="21" cy="3" rx="2.5" ry="1.5" fill="#b0b0b0"/><rect x="30" y="2" width="6" height="14" rx="3" fill="#d0d0d0" stroke="#aaa" stroke-width="0.8"/><ellipse cx="33" cy="3" rx="2.5" ry="1.5" fill="#b0b0b0"/><rect x="20" y="59" width="14" height="4" rx="2" fill="#c0c0c0"/><rect x="22" y="60" width="10" height="2" rx="1" fill="#999"/><rect x="7" y="22" width="40" height="8" rx="10" fill="rgba(255,255,255,0.3)"/></svg>';
@@ -293,20 +310,46 @@ var CABLE_SVG='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 58 52" fill=
 var CABLE_SVG_LARGE='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 58 52" fill="none" width="80" height="72"><path d="M14 6 C14 6 14 14 20 18 C26 22 38 22 42 28 C46 34 44 44 44 44" stroke="#f0f0f0" stroke-width="3.5" stroke-linecap="round"/><rect x="8" y="2" width="12" height="8" rx="2.5" fill="#e8e8e8" stroke="#ccc" stroke-width="0.8"/><rect x="10" y="4" width="8" height="4" rx="1.5" fill="#c8c8c8"/><rect x="36" y="44" width="14" height="8" rx="4" fill="#e8e8e8" stroke="#ccc" stroke-width="0.8"/><rect x="38" y="46" width="10" height="4" rx="2" fill="#c8c8c8"/></svg>';
 var CARD_SVG='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 58 52" fill="none"><rect x="10" y="10" width="38" height="28" rx="4" fill="#f0f0f0" stroke="#d0d0d0" stroke-width="1"/><rect x="13" y="8" width="36" height="4" rx="2" fill="#e0e0e0" stroke="#ccc" stroke-width="0.8"/><rect x="12" y="6" width="36" height="4" rx="2" fill="#ebebeb" stroke="#d8d8d8" stroke-width="0.8"/><rect x="14" y="18" width="14" height="2" rx="1" fill="#ccc"/><rect x="14" y="22" width="10" height="2" rx="1" fill="#ccc"/><rect x="14" y="14" width="10" height="7" rx="1.5" fill="#d4af37" stroke="#c09a2f" stroke-width="0.5"/><circle cx="40" cy="31" r="4" stroke="#ccc" stroke-width="1"/><circle cx="36" cy="31" r="4" stroke="#ccc" stroke-width="1"/></svg>';
 var CARD_SVG_LARGE='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 58 52" fill="none" width="80" height="72"><rect x="10" y="10" width="38" height="28" rx="4" fill="#f0f0f0" stroke="#d0d0d0" stroke-width="1"/><rect x="13" y="8" width="36" height="4" rx="2" fill="#e0e0e0" stroke="#ccc" stroke-width="0.8"/><rect x="12" y="6" width="36" height="4" rx="2" fill="#ebebeb" stroke="#d8d8d8" stroke-width="0.8"/><rect x="14" y="18" width="14" height="2" rx="1" fill="#ccc"/><rect x="14" y="22" width="10" height="2" rx="1" fill="#ccc"/><rect x="14" y="14" width="10" height="7" rx="1.5" fill="#d4af37" stroke="#c09a2f" stroke-width="0.5"/><circle cx="40" cy="31" r="4" stroke="#ccc" stroke-width="1"/><circle cx="36" cy="31" r="4" stroke="#ccc" stroke-width="1"/></svg>';
-var CHARGER_SVG_LARGE='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 54 64" fill="none" width="72" height="86"><rect x="7" y="22" width="40" height="40" rx="10" fill="#e8e8e8" stroke="#c0c0c0" stroke-width="1"/><rect x="15" y="14" width="24" height="12" rx="4" fill="#f0f0f0" stroke="#c8c8c8" stroke-width="0.8"/><rect x="18" y="2" width="6" height="14" rx="3" fill="#d0d0d0" stroke="#aaa" stroke-width="0.8"/><ellipse cx="21" cy="3" rx="2.5" ry="1.5" fill="#b0b0b0"/><rect x="30" y="2" width="6" height="14" rx="3" fill="#d0d0d0" stroke="#aaa" stroke-width="0.8"/><ellipse cx="33" cy="3" rx="2.5" ry="1.5" fill="#b0b0b0"/><rect x="20" y="59" width="14" height="4" rx="2" fill="#c0c0c0"/><rect x="22" y="60" width="10" height="2" rx="1" fill="#999"/><rect x="7" y="22" width="40" height="8" rx="10" fill="rgba(255,255,255,0.3)"/></svg>';
 
 var PRIZES=[
-  {name:'iPad 11',      emoji:'__IPAD__',    desc:'iPad 11 Wi-Fi 128GB!\nОформите выдачу у менеджера.',    type:'jackpot',color:'#fbbf24',w:1},
-  {name:'Скидка 2000₽', emoji:'🎁',          desc:'Скидка 2 000 ₽ на след. покупку.\nДействует 30 дней.', type:'win',    color:'#c084fc',w:112},
-  {name:'Картхолдер',    emoji:'__CARD__',    desc:'Картхолдер в подарок!\nВыберите у менеджера.',         type:'prize',  color:'#34d399',w:200},
-  {name:'Скидка 1000₽',  emoji:'💳',          desc:'Скидка 1 000 ₽ на след. покупку.\nДействует 30 дней.', type:'win',    color:'#6d6a8a',w:720},
-  {name:'Зарядный провод',emoji:'__CABLE__',  desc:'Зарядный провод в подарок!\nВыберите у менеджера.',    type:'prize',  color:'#6d6a8a',w:500},
-  {name:'Ещё раз!',     emoji:'🔄',          desc:'Попробуйте снова —\nудача совсем рядом!',               type:'retry',  color:'#6d6a8a',w:260},
-  {name:'Зарядный блок',emoji:'__CHARGER__', desc:'Зарядный блок в подарок!\nВыберите у менеджера.',       type:'prize',  color:'#60a5fa',w:200},
+  {name:'iPhone 17',    emoji:'__IPHONE__',  desc:'iPhone 17! Невероятная редкость!\nОформите выдачу у менеджера немедленно.', type:'mega',   rarity:'mega',   color:'#ff3b8d',w:2},
+  {name:'iPad 11',      emoji:'__IPAD__',    desc:'iPad 11 Wi-Fi 128GB!\nОформите выдачу у менеджера.',    type:'jackpot', rarity:'jackpot',color:'#fbbf24',w:100},
+  {name:'Скидка 2000₽', emoji:'🎁',          desc:'Скидка 2 000 ₽ на след. покупку.\nДействует 30 дней.', type:'win',     rarity:'purple', color:'#c084fc',w:20700},
+  {name:'Картхолдер',    emoji:'__CARD__',    desc:'Картхолдер в подарок!\nВыберите у менеджера.',         type:'prize',   rarity:'green',  color:'#34d399',w:20000},
+  {name:'Скидка 1000₽',  emoji:'💳',          desc:'Скидка 1 000 ₽ на след. покупку.\nДействует 30 дней.', type:'win',     rarity:'common', color:'#6d6a8a',w:72000},
+  {name:'Зарядный провод',emoji:'__CABLE__',  desc:'Зарядный провод в подарок!\nВыберите у менеджера.',    type:'prize',   rarity:'common', color:'#6d6a8a',w:50000},
+  {name:'Ещё раз!',     emoji:'🔄',          desc:'Попробуйте снова —\nудача совсем рядом!',               type:'retry',   rarity:'common', color:'#6d6a8a',w:26000},
+  {name:'Зарядный блок',emoji:'__CHARGER__', desc:'Зарядный блок в подарок!\nВыберите у менеджера.',       type:'prize',   rarity:'blue',   color:'#60a5fa',w:10500},
 ];
 
-var WA=[];for(var i=0;i<PRIZES.length;i++)for(var w=0;w<PRIZES[i].w;w++)WA.push(i);
-// Near-miss паттерн: раз в 2, раз в 5, раз в 7 — циклично
+function cumWeights(){
+  var cum=[],sum=0;
+  for(var i=0;i<PRIZES.length;i++){sum+=PRIZES[i].w;cum.push(sum);}
+  return {cum:cum,total:sum};
+}
+var CW=cumWeights();
+function pickRandomIdx(){
+  var r=Math.random()*CW.total;
+  for(var i=0;i<CW.cum.length;i++)if(r<CW.cum[i])return i;
+  return CW.cum.length-1;
+}
+
+// Веса ТОЛЬКО для визуального заполнения ленты (не влияют на реальный исход).
+// iPad показывается заметно чаще чем по реальному весу — для эффекта "почти выпал".
+// iPhone показывается вдвое реже iPad.
+var VISUAL_W=[8,16,300,260,900,650,340,150]; // тот же порядок что в PRIZES: iPhone,iPad,2000,card,1000,cable,retry,charger
+function visualCumWeights(){
+  var cum=[],sum=0;
+  for(var i=0;i<VISUAL_W.length;i++){sum+=VISUAL_W[i];cum.push(sum);}
+  return {cum:cum,total:sum};
+}
+var VCW=visualCumWeights();
+function pickVisualIdx(){
+  var r=Math.random()*VCW.total;
+  for(var i=0;i<VCW.cum.length;i++)if(r<VCW.cum[i])return i;
+  return VCW.cum.length-1;
+}
+
 var NM_PATTERN=[2,5,7],nmPatIdx=0,nextNM=NM_PATTERN[0];
 var IW=118;
 var STOPS=[-IW*.4,-IW*.2,0,IW*.2,IW*.4];
@@ -321,99 +364,143 @@ var stopBtn=document.getElementById('stopBtn');
 var currentOffset=0,currentSpeed=0,maxSpeed=3.0,accelDuration=2200;
 var finalIdx=0,finalPos=0,rafId=null,accelStart=null,lastTime=null;
 
-// Видимое окно — только столько элементов сколько помещается + запас
-var VISIBLE=20; // элементов в DOM
-var virtualItems=[]; // массив индексов призов для виртуальной ленты
-var virtualStart=0; // с какого виртуального индекса начинается DOM
+var soundOn=true;
+try{var savedSound=localStorage.getItem('nextapple_sound');if(savedSound!==null)soundOn=savedSound==='1';}catch(e){}
+function setVolUI(){
+  document.getElementById('volIconOn').style.display=soundOn?'block':'none';
+  document.getElementById('volIconOff').style.display=soundOn?'none':'block';
+  document.getElementById('volLabel').textContent=soundOn?'Звук включён':'Звук выключен';
+}
+setVolUI();
+document.getElementById('soundToggle').addEventListener('click',function(){
+  soundOn=!soundOn;
+  try{localStorage.setItem('nextapple_sound',soundOn?'1':'0');}catch(e){}
+  setVolUI();
+});
+
+var audioCtx=null;
+function getCtx(){if(!audioCtx)audioCtx=new (window.AudioContext||window.webkitAudioContext)();return audioCtx;}
+function caseTick(speedFactor){
+  if(!soundOn)return;
+  var c=getCtx();
+  var o=c.createOscillator(),g=c.createGain();
+  o.type='square';o.frequency.value=2200;
+  var f=c.createBiquadFilter();f.type='highpass';f.frequency.value=1500;
+  g.gain.setValueAtTime(0.0001,c.currentTime);
+  g.gain.linearRampToValueAtTime(0.05*(speedFactor||1),c.currentTime+0.002);
+  g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+0.025);
+  o.connect(f);f.connect(g);g.connect(c.destination);
+  o.start();o.stop(c.currentTime+0.03);
+}
+function tone(freq,type,t,dur,vol){
+  var c=getCtx();
+  var o=c.createOscillator(),g=c.createGain();
+  o.type=type;o.frequency.value=freq;
+  g.gain.setValueAtTime(0.0001,t);
+  g.gain.linearRampToValueAtTime(vol,t+0.012);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g);g.connect(c.destination);
+  o.start(t);o.stop(t+dur);
+}
+function bass(freq1,freq2,t,dur,vol){
+  var c=getCtx();
+  var o=c.createOscillator(),g=c.createGain();
+  o.type='sine';o.frequency.setValueAtTime(freq1,t);
+  o.frequency.exponentialRampToValueAtTime(freq2,t+dur*0.6);
+  g.gain.setValueAtTime(0.0001,t);
+  g.gain.linearRampToValueAtTime(vol,t+0.01);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g);g.connect(c.destination);
+  o.start(t);o.stop(t+dur);
+}
+function soundCommon(){if(!soundOn)return;tone(660,'sine',getCtx().currentTime,0.18,0.07);}
+function soundGreen(){if(!soundOn)return;var t=getCtx().currentTime;tone(523.25,'triangle',t,0.3,0.08);tone(783.99,'triangle',t+0.05,0.35,0.07);}
+function soundBlue(){if(!soundOn)return;var t=getCtx().currentTime;bass(160,90,t,0.3,0.12);tone(659.25,'triangle',t+0.04,0.4,0.09);tone(987.77,'triangle',t+0.09,0.45,0.07);}
+function soundPurple(){if(!soundOn)return;var t=getCtx().currentTime;bass(180,80,t,0.4,0.18);[698.46,880.00,1046.50].forEach(function(f,i){tone(f,'triangle',t+0.03+i*0.06,0.55,0.09);});}
+function soundJackpot(){
+  if(!soundOn)return;var c=getCtx(),t=c.currentTime;
+  bass(90,38,t,0.8,0.32);
+  [523.25,659.25,783.99,1046.50,1318.51].forEach(function(f,i){tone(f,'sine',t+0.05+i*0.07,1.0,0.1);});
+}
+function soundMega(){
+  if(!soundOn)return;var c=getCtx(),t=c.currentTime;
+  bass(110,30,t,1.2,0.4);
+  [392,523.25,659.25,783.99,1046.50,1318.51,1568].forEach(function(f,i){tone(f,'sine',t+0.04+i*0.06,1.3,0.11);});
+  var sweep=c.createOscillator(),sg=c.createGain();
+  sweep.type='sawtooth';
+  sweep.frequency.setValueAtTime(150,t+0.5);
+  sweep.frequency.exponentialRampToValueAtTime(2400,t+1.3);
+  var filt=c.createBiquadFilter();filt.type='bandpass';filt.frequency.value=1000;filt.Q.value=3;
+  sg.gain.setValueAtTime(0.0001,t+0.5);
+  sg.gain.linearRampToValueAtTime(0.09,t+0.6);
+  sg.gain.exponentialRampToValueAtTime(0.0001,t+1.4);
+  sweep.connect(filt);filt.connect(sg);sg.connect(c.destination);
+  sweep.start(t+0.5);sweep.stop(t+1.4);
+}
+var SOUND_BY_RARITY={common:soundCommon,green:soundGreen,blue:soundBlue,purple:soundPurple,jackpot:soundJackpot,mega:soundMega};
 
 function makeItemInner(p,isIpad){
   if(isIpad)return'<div class="ci-svg">'+IPAD_SVG+'</div><div class="ci-name">'+p.name+'</div><div class="ci-bar" style="background:'+p.color+'"></div>';
+  if(p.emoji==='__IPHONE__')return'<div class="ci-svg">'+IPHONE_SVG+'</div><div class="ci-name">'+p.name+'</div><div class="ci-bar" style="background:'+p.color+'"></div>';
   if(p.emoji==='__CHARGER__')return'<div class="ci-svg">'+CHARGER_SVG+'</div><div class="ci-name">'+p.name+'</div><div class="ci-bar" style="background:'+p.color+'"></div>';
   if(p.emoji==='__CABLE__')return'<div class="ci-svg">'+CABLE_SVG+'</div><div class="ci-name">'+p.name+'</div><div class="ci-bar" style="background:'+p.color+'"></div>';
   if(p.emoji==='__CARD__')return'<div class="ci-svg">'+CARD_SVG+'</div><div class="ci-name">'+p.name+'</div><div class="ci-bar" style="background:'+p.color+'"></div>';
   return'<div class="ci-emoji">'+p.emoji+'</div><div class="ci-name">'+p.name+'</div><div class="ci-bar" style="background:'+p.color+'"></div>';
 }
-function makeItem(p,isIpad){
-  var el=document.createElement('div');
-  el.className='case-item'+(isIpad?' ipad-glow':'');
-  el.style.borderColor=isIpad?'rgba(251,191,36,.5)':p.color+'33';
-  el.innerHTML=makeItemInner(p,isIpad);
+function makeItem(idx){
+  var p=PRIZES[idx],el=document.createElement('div');
+  var glowClass=p.rarity==='mega'?' mega-glow':(p.rarity==='jackpot'?' ipad-glow':'');
+  el.className='case-item'+glowClass;
+  el.style.borderColor=p.rarity==='mega'?'rgba(255,59,141,.6)':(p.rarity==='jackpot'?'rgba(251,191,36,.5)':p.color+'33');
+  el.innerHTML=makeItemInner(p,p.rarity==='jackpot');
+  el.dataset.idx=idx;
   return el;
 }
 
-// Генерируем случайный приз (без принудительного iPad рядом с финалом)
-function randomPrizeIdx(){
-  return WA[Math.floor(Math.random()*WA.length)];
-}
-
-// Строим начальную ленту — 60 элементов
 var STRIP_SIZE=60;
 function buildStrip(){
   track.innerHTML='';
-  virtualItems=[];
-  for(var i=0;i<STRIP_SIZE;i++){
-    // iPad каждые 7 позиций для визуала, но НЕ рядом с финалом
-    var forceIpad=(i>5 && i%7===0);
-    var ri=forceIpad?0:randomPrizeIdx();
-    virtualItems.push(ri);
-    track.appendChild(makeItem(PRIZES[ri],ri===0));
-  }
+  for(var i=0;i<STRIP_SIZE;i++)track.appendChild(makeItem(pickVisualIdx()));
   currentOffset=0;
   track.style.transform='translateX(0px)';
 }
 
-// Добавляем элементы в конец ленты по мере прокрутки
 function extendStripIfNeeded(){
-  var outerW=trackOuter.offsetWidth;
-  // Сколько пикселей уже прокручено
   var scrolled=Math.abs(currentOffset);
-  // Сколько элементов прокручено
   var itemsScrolled=Math.floor(scrolled/IW);
-  // Сколько элементов в DOM
   var domCount=track.children.length;
-  // Если до конца ленты осталось меньше 20 элементов — добавляем ещё 20
   if(domCount-itemsScrolled<20){
-    for(var j=0;j<20;j++){
-      var ri=randomPrizeIdx();
-      virtualItems.push(ri);
-      track.appendChild(makeItem(PRIZES[ri],ri===0));
-    }
+    for(var j=0;j<20;j++)track.appendChild(makeItem(pickVisualIdx()));
   }
 }
 
-// Вычисляем финальную позицию — берём текущую прокрученную позицию + запас
 function computeFinalPos(nearMiss){
   var scrolled=Math.abs(currentOffset);
   var itemsScrolled=Math.floor(scrolled/IW);
-  // Финал на 15-25 элементов вперёд от текущей позиции
   var ahead=15+Math.floor(Math.random()*10);
   var fp=itemsScrolled+ahead;
-  // Убедимся что в DOM достаточно элементов
-  while(track.children.length<=fp+5){
-    var ri=randomPrizeIdx();
-    virtualItems.push(ri);
-    track.appendChild(makeItem(PRIZES[ri],ri===0));
-  }
+  while(track.children.length<=fp+5)track.appendChild(makeItem(pickVisualIdx()));
 
-  // Near-miss: ставим iPad на 1-2 позиции ДО финала
   if(nearMiss){
-    var nmOffset=1+Math.floor(Math.random()*2); // 1 или 2 позиции раньше
+    var nmOffset=1+Math.floor(Math.random()*2);
     var nmPos=fp-nmOffset;
     if(nmPos>=0 && track.children[nmPos]){
+      var jackpotPrizeIdx=1;
       var iPadEl=track.children[nmPos];
       iPadEl.className='case-item ipad-glow';
       iPadEl.style.borderColor='rgba(251,191,36,.5)';
-      iPadEl.innerHTML=makeItemInner(PRIZES[0],true);
+      iPadEl.innerHTML=makeItemInner(PRIZES[jackpotPrizeIdx],true);
+      iPadEl.dataset.idx=jackpotPrizeIdx;
     }
   }
 
-  // Ставим финальный приз
   var el=track.children[fp];
   var p=PRIZES[finalIdx];
-  var isIpad=finalIdx===0;
-  el.className='case-item'+(isIpad?' ipad-glow':'');
-  el.style.borderColor=isIpad?'rgba(251,191,36,.5)':p.color+'44';
-  el.innerHTML=makeItemInner(p,isIpad);
+  var glowClass=p.rarity==='mega'?' mega-glow':(p.rarity==='jackpot'?' ipad-glow':'');
+  el.className='case-item'+glowClass;
+  el.style.borderColor=p.rarity==='mega'?'rgba(255,59,141,.6)':(p.rarity==='jackpot'?'rgba(251,191,36,.5)':p.color+'44');
+  el.innerHTML=makeItemInner(p,p.rarity==='jackpot');
+  el.dataset.idx=finalIdx;
   return fp;
 }
 
@@ -428,8 +515,8 @@ function doSpin(){
   att--;upd();spinning=true;stopping=false;spinCount++;
   currentNearMiss=(spinCount===nextNM);
   if(currentNearMiss){nmPatIdx=(nmPatIdx+1)%NM_PATTERN.length;nextNM=spinCount+NM_PATTERN[nmPatIdx];}
-  finalIdx=WA[Math.floor(Math.random()*WA.length)];
-  if(currentNearMiss&&finalIdx===0)finalIdx=4;
+  finalIdx=pickRandomIdx();
+  if(currentNearMiss&&finalIdx===1)finalIdx=4;
   buildStrip();
   spinBtn.disabled=true;spinBtn.style.display='none';
   stopBtn.classList.add('visible');stopBtn.disabled=false;
@@ -450,7 +537,8 @@ function accelerate(now){
   speedLabel.textContent=SPEED_LABELS[Math.min(Math.floor(pct*5),4)];
   currentOffset-=currentSpeed*dt;
   track.style.transform='translateX('+currentOffset+'px)';
-  // Динамически добавляем элементы
+  var pos=Math.floor(Math.abs(currentOffset)/IW);
+  if(pos!==accelerate._lastTick){accelerate._lastTick=pos;caseTick(0.6);}
   extendStripIfNeeded();
   if(!stopping)rafId=requestAnimationFrame(accelerate);
 }
@@ -459,21 +547,31 @@ function doStop(){
   if(!spinning||stopping)return;
   stopping=true;stopBtn.disabled=true;
   cancelAnimationFrame(rafId);
-  // Вычисляем финальную позицию прямо сейчас
   finalPos=computeFinalPos(currentNearMiss);
   var target=getFinalOffset(finalPos);
   var startOffset=currentOffset;
   var dist=target-startOffset;
   var brakeDur=Math.max(2800,currentSpeed*1400);
   var t0=null;
+  var lastBrakeTick=Math.floor(Math.abs(startOffset)/IW);
+  var nearMissPauseDone=false;
   function brake(now){
     if(!t0)t0=now;
     var t=Math.min((now-t0)/brakeDur,1);
     var eased=1-Math.pow(1-t,4);
-    track.style.transform='translateX('+(startOffset+dist*eased)+'px)';
+    var cur=startOffset+dist*eased;
+    track.style.transform='translateX('+cur+'px)';
+    var pos=Math.floor(Math.abs(cur)/IW);
+    if(pos!==lastBrakeTick){lastBrakeTick=pos;var remaining=1-t;caseTick(0.5+0.6*(1-remaining));}
     speedBar.style.width=((1-eased)*currentSpeed/maxSpeed*100)+'%';
-    var pct=(1-eased)*currentSpeed/maxSpeed;
-    speedLabel.textContent=pct>0.1?SPEED_LABELS[Math.min(Math.floor(pct*5),4)]:'— —';
+    var spct=(1-eased)*currentSpeed/maxSpeed;
+    speedLabel.textContent=spct>0.1?SPEED_LABELS[Math.min(Math.floor(spct*5),4)]:'— —';
+    if(currentNearMiss&&!nearMissPauseDone&&t>0.72&&t<0.86){
+      nearMissPauseDone=true;
+      speedLabel.textContent='Почти...';
+      setTimeout(function(){requestAnimationFrame(brake);},420);
+      return;
+    }
     if(t<1)requestAnimationFrame(brake);
     else{speedBar.style.width='0%';speedLabel.textContent='— —';onDone();}
   }
@@ -482,36 +580,41 @@ function doStop(){
 
 function onDone(){
   var el=track.children[finalPos];
+  var landedIdx=el?parseInt(el.dataset.idx):finalIdx;
   if(el)el.className='case-item win-glow';
   spinning=false;stopping=false;
   stopBtn.classList.remove('visible');stopBtn.style.display='';
-  spinBtn.style.display='';spinBtn.disabled=false;
-  setTimeout(function(){showResult(finalIdx);},600);
+  spinBtn.style.display='';spinBtn.disabled=(att<=0);
+  setTimeout(function(){showResult(landedIdx);},600);
 }
 function showResult(i){
   var p=PRIZES[i];
   document.getElementById('rcard').style.setProperty('--rcolor',p.color);
   document.getElementById('rglow').style.background=p.color;
   var emojiEl=document.getElementById('remoji');
-  if(i===0)emojiEl.innerHTML=IPAD_SVG_LARGE;
+  if(p.emoji==='__IPHONE__')emojiEl.innerHTML=IPHONE_SVG_LARGE;
+  else if(p.emoji==='__IPAD__')emojiEl.innerHTML=IPAD_SVG_LARGE;
   else if(p.emoji==='__CHARGER__')emojiEl.innerHTML=CHARGER_SVG_LARGE;
   else if(p.emoji==='__CABLE__')emojiEl.innerHTML=CABLE_SVG_LARGE;
   else if(p.emoji==='__CARD__')emojiEl.innerHTML=CARD_SVG_LARGE;
   else emojiEl.textContent=p.emoji;
   var tEl=document.getElementById('rtitle');
-  if(p.type==='jackpot'){tEl.textContent='🏆 ДЖЕКПОТ!';tEl.className='rtitle jackpot';}
+  if(p.type==='mega'){tEl.textContent='🔥 МЕГА-ДЖЕКПОТ!';tEl.className='rtitle mega';}
+  else if(p.type==='jackpot'){tEl.textContent='🏆 ДЖЕКПОТ!';tEl.className='rtitle jackpot';}
   else if(p.type==='win'){tEl.textContent='Вы выиграли!';tEl.className='rtitle win';}
   else if(p.type==='retry'){tEl.textContent='Попробуйте ещё!';tEl.className='rtitle';}
   else{tEl.textContent=p.name;tEl.className='rtitle';}
   document.getElementById('rdesc').textContent=p.desc;
   document.getElementById('overlay').classList.add('show');
-  if(p.type==='jackpot'||p.type==='win')launchConfetti(p.type==='jackpot'?150:70);
+  (SOUND_BY_RARITY[p.rarity]||soundCommon)();
+  if(p.type==='mega')launchConfetti(300);
+  else if(p.type==='jackpot'||p.type==='win')launchConfetti(p.type==='jackpot'?150:70);
   if(p.type==='retry'){att++;upd();}else addHistory(p);
 }
 function closeResult(){document.getElementById('overlay').classList.remove('show');document.getElementById('cwrap').innerHTML='';}
 function launchConfetti(n){
   var wrap=document.getElementById('cwrap');
-  var colors=['#fbbf24','#8b5cf6','#c084fc','#f43f5e','#34d399','#fff'];
+  var colors=['#fbbf24','#8b5cf6','#c084fc','#f43f5e','#34d399','#ff3b8d','#fff'];
   for(var i=0;i<n;i++){
     var d=document.createElement('div');d.className='cp';
     var sz=(5+Math.random()*10)+'px';
@@ -532,7 +635,8 @@ function addHistory(p){
   var now=new Date();
   var t=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
   var item=document.createElement('div');item.className='hitem';
-  var icon=(p.emoji==='__IPAD__')?'<span class="hemoji" style="width:22px;height:22px;display:inline-flex">'+IPAD_SVG+'</span>':
+  var icon=(p.emoji==='__IPHONE__')?'<span class="hemoji" style="width:22px;height:22px;display:inline-flex">'+IPHONE_SVG+'</span>':
+           (p.emoji==='__IPAD__')?'<span class="hemoji" style="width:22px;height:22px;display:inline-flex">'+IPAD_SVG+'</span>':
            (p.emoji==='__CHARGER__')?'<span class="hemoji" style="width:22px;height:22px;display:inline-flex">'+CHARGER_SVG+'</span>':
            (p.emoji==='__CABLE__')?'<span class="hemoji" style="width:22px;height:22px;display:inline-flex">'+CABLE_SVG+'</span>':
            (p.emoji==='__CARD__')?'<span class="hemoji" style="width:22px;height:22px;display:inline-flex">'+CARD_SVG+'</span>':
@@ -542,8 +646,10 @@ function addHistory(p){
 }
 finalIdx=4;buildStrip();
 (function(){
-  var e=document.getElementById('pi-ipad');
-  if(e){e.style.cssText='width:28px;height:28px;display:inline-flex;flex-shrink:0';e.innerHTML=IPAD_SVG;}
+  var e=document.getElementById('pi-iphone');
+  if(e){e.style.cssText='width:28px;height:28px;display:inline-flex;flex-shrink:0';e.innerHTML=IPHONE_SVG;}
+  var e1=document.getElementById('pi-ipad');
+  if(e1){e1.style.cssText='width:28px;height:28px;display:inline-flex;flex-shrink:0';e1.innerHTML=IPAD_SVG;}
   var e2=document.getElementById('pi-charger');
   if(e2){e2.style.cssText='width:28px;height:28px;display:inline-flex;flex-shrink:0';e2.innerHTML=CHARGER_SVG;}
   var e3=document.getElementById('pi-cable');
