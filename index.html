@@ -334,10 +334,10 @@ function pickRandomIdx(){
   return CW.cum.length-1;
 }
 
-// Веса ТОЛЬКО для визуального заполнения ленты (не влияют на реальный исход).
-// iPad показывается заметно чаще чем по реальному весу — для эффекта "почти выпал".
-// iPhone показывается вдвое реже iPad.
-var VISUAL_W=[8,16,300,260,900,650,340,150]; // тот же порядок что в PRIZES: iPhone,iPad,2000,card,1000,cable,retry,charger
+// Веса для визуального заполнения ленты пропорциональны реальным шансам выигрыша (PRIZES[i].w).
+// Это не влияет на исход (его определяет pickRandomIdx/cumWeights), но и не создаёт
+// у пользователя ложного впечатления, что редкие призы выпадают чаще, чем на самом деле.
+var VISUAL_W=PRIZES.map(function(p){return p.w;});
 function visualCumWeights(){
   var cum=[],sum=0;
   for(var i=0;i<VISUAL_W.length;i++){sum+=VISUAL_W[i];cum.push(sum);}
@@ -350,11 +350,9 @@ function pickVisualIdx(){
   return VCW.cum.length-1;
 }
 
-var NM_PATTERN=[2,5,7],nmPatIdx=0,nextNM=NM_PATTERN[0];
 var IW=118;
 var STOPS=[-IW*.4,-IW*.2,0,IW*.2,IW*.4];
-var spinning=false,stopping=false,att=0,spinCount=0;
-var currentNearMiss=false;
+var spinning=false,stopping=false,att=0;
 var track=document.getElementById('track');
 var trackOuter=document.getElementById('trackOuter');
 var speedBar=document.getElementById('speedBar');
@@ -474,25 +472,12 @@ function extendStripIfNeeded(){
   }
 }
 
-function computeFinalPos(nearMiss){
+function computeFinalPos(){
   var scrolled=Math.abs(currentOffset);
   var itemsScrolled=Math.floor(scrolled/IW);
   var ahead=15+Math.floor(Math.random()*10);
   var fp=itemsScrolled+ahead;
   while(track.children.length<=fp+5)track.appendChild(makeItem(pickVisualIdx()));
-
-  if(nearMiss){
-    var nmOffset=1+Math.floor(Math.random()*2);
-    var nmPos=fp-nmOffset;
-    if(nmPos>=0 && track.children[nmPos]){
-      var jackpotPrizeIdx=1;
-      var iPadEl=track.children[nmPos];
-      iPadEl.className='case-item ipad-glow';
-      iPadEl.style.borderColor='rgba(251,191,36,.5)';
-      iPadEl.innerHTML=makeItemInner(PRIZES[jackpotPrizeIdx],true);
-      iPadEl.dataset.idx=jackpotPrizeIdx;
-    }
-  }
 
   var el=track.children[fp];
   var p=PRIZES[finalIdx];
@@ -512,11 +497,8 @@ function getFinalOffset(fp){
 
 function doSpin(){
   if(spinning||att<=0)return;
-  att--;upd();spinning=true;stopping=false;spinCount++;
-  currentNearMiss=(spinCount===nextNM);
-  if(currentNearMiss){nmPatIdx=(nmPatIdx+1)%NM_PATTERN.length;nextNM=spinCount+NM_PATTERN[nmPatIdx];}
+  att--;upd();spinning=true;stopping=false;
   finalIdx=pickRandomIdx();
-  if(currentNearMiss&&finalIdx===1)finalIdx=4;
   buildStrip();
   spinBtn.disabled=true;spinBtn.style.display='none';
   stopBtn.classList.add('visible');stopBtn.disabled=false;
@@ -547,14 +529,13 @@ function doStop(){
   if(!spinning||stopping)return;
   stopping=true;stopBtn.disabled=true;
   cancelAnimationFrame(rafId);
-  finalPos=computeFinalPos(currentNearMiss);
+  finalPos=computeFinalPos();
   var target=getFinalOffset(finalPos);
   var startOffset=currentOffset;
   var dist=target-startOffset;
   var brakeDur=Math.max(2800,currentSpeed*1400);
   var t0=null;
   var lastBrakeTick=Math.floor(Math.abs(startOffset)/IW);
-  var nearMissPauseDone=false;
   function brake(now){
     if(!t0)t0=now;
     var t=Math.min((now-t0)/brakeDur,1);
@@ -566,12 +547,6 @@ function doStop(){
     speedBar.style.width=((1-eased)*currentSpeed/maxSpeed*100)+'%';
     var spct=(1-eased)*currentSpeed/maxSpeed;
     speedLabel.textContent=spct>0.1?SPEED_LABELS[Math.min(Math.floor(spct*5),4)]:'— —';
-    if(currentNearMiss&&!nearMissPauseDone&&t>0.72&&t<0.86){
-      nearMissPauseDone=true;
-      speedLabel.textContent='Почти...';
-      setTimeout(function(){requestAnimationFrame(brake);},420);
-      return;
-    }
     if(t<1)requestAnimationFrame(brake);
     else{speedBar.style.width='0%';speedLabel.textContent='— —';onDone();}
   }
